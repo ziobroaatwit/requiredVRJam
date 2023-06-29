@@ -1,3 +1,4 @@
+using Oculus.Interaction;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ public class AIController : MonoBehaviour
     public NavMeshAgent agent;
     [Range(0, 100)] public float speed;
     [Range(1, 500)] public float walkRadius;
+    AIController controller;
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        controller = GetComponent<AIController>();
         if (agent != null)
         {
             agent.speed = speed;
@@ -25,7 +28,12 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (agent != null && agent.remainingDistance <= agent.stoppingDistance)
+        if (transform.GetComponent<OVRGrabbable>().isGrabbed)
+        {
+            gameObject.GetComponent<NavMeshAgent>().enabled = false;
+            controller.enabled = false;
+        }
+        else if (agent != null && agent.remainingDistance <= agent.stoppingDistance)
         {
             agent.SetDestination(RandomNavMeshLocation());
         }
