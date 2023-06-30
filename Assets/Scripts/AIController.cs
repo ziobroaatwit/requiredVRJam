@@ -7,8 +7,10 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent (typeof(NavMeshAgent))]
+
 public class AIController : MonoBehaviour
 {
+    public GameObject scoreManager;
     public NavMeshAgent agent;
     [Range(0, 100)] public float speed;
     [Range(1, 500)] public float walkRadius;
@@ -32,6 +34,7 @@ public class AIController : MonoBehaviour
         {
             gameObject.GetComponent<NavMeshAgent>().enabled = false;
             controller.enabled = false;
+            scoreManager.GetComponent<ScoreController>().score++;
         }
         else if (agent != null && agent.remainingDistance <= agent.stoppingDistance)
         {
