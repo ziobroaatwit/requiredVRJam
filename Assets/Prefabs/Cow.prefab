@@ -147,6 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0c4bd9c755beb84d915bb65983663a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreManager: {fileID: 0}
   agent: {fileID: 1309402231}
   speed: 2
   walkRadius: 5
