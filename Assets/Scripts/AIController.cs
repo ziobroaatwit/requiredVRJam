@@ -30,6 +30,8 @@ public class AIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //checks to see if AI was grabbed and if it was grabbed its AI and NavMesh get turned off
+        //else the AI contiunes to randomly move in the area set for it
         if (transform.GetComponent<OVRGrabbable>().isGrabbed)
         {
             gameObject.GetComponent<NavMeshAgent>().enabled = false;
@@ -41,7 +43,7 @@ public class AIController : MonoBehaviour
             agent.SetDestination(RandomNavMeshLocation());
         }
     }
-
+    //logic used to find and set to randonly move in the NavMesh and return the position
     public Vector3 RandomNavMeshLocation()
     {
         Vector3 finalPos = Vector3.zero;
