@@ -2,6 +2,7 @@ using Oculus.Interaction;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,17 +16,24 @@ public class AIController : MonoBehaviour
     [Range(0, 100)] public float speed;
     [Range(1, 500)] public float walkRadius;
     AIController controller;
+    private bool hasBeenGrabbed = false;
+    private Vector3 targetPosition;
+    private AIState currentState;
+    public float fleeDistance = 5f;
+    public Transform player;
+    private enum AIState
+    {
+        Roaming,
+        Fleeing
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
-        controller = GetComponent<AIController>();
-        if (agent != null)
-        {
-            agent.speed = speed;
-            agent.SetDestination(RandomNavMeshLocation());
-        }
+        agent.speed = speed;
+        currentState = AIState.Roaming;
+        targetPosition = RandomNavMeshLocation();
     }
 
     // Update is called once per frame
@@ -37,23 +45,62 @@ public class AIController : MonoBehaviour
         {
             gameObject.GetComponent<NavMeshAgent>().enabled = false;
             controller.enabled = false;
-            scoreManager.GetComponent<ScoreController>().score++;
+            if (hasBeenGrabbed == false)
+            {
+                hasBeenGrabbed = true;
+                scoreManager.GetComponent<ScoreController>().score++;
+            }
         }
-        else if (agent != null && agent.remainingDistance <= agent.stoppingDistance)
+        switch (currentState)
         {
-            agent.SetDestination(RandomNavMeshLocation());
+            case AIState.Roaming:
+                Roam();
+                break;
+
+            case AIState.Fleeing:
+                Flee();
+                break;
         }
     }
     //logic used to find and set to randonly move in the NavMesh and return the position
-    public Vector3 RandomNavMeshLocation()
+    private Vector3 RandomNavMeshLocation()
     {
-        Vector3 finalPos = Vector3.zero;
-        Vector3 randomPos = UnityEngine.Random.insideUnitSphere * walkRadius;
-        randomPos += transform.position;
-        if(NavMesh.SamplePosition(randomPos, out NavMeshHit hit, walkRadius, 1))
+        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * walkRadius;
+        randomDirection.y = 0;
+
+        Vector3 randomPos = transform.position + randomDirection;
+        NavMeshHit hit;
+
+        if (NavMesh.SamplePosition(randomPos, out hit, walkRadius, 1))
         {
-            finalPos = hit.position;
+            return hit.position;
         }
-        return finalPos;
+
+        return transform.position;
+    }
+    private void Roam()
+    {
+        if (!agent.pathPending && agent.remainingDistance < 0.5f)
+        {
+            targetPosition = RandomNavMeshLocation();
+            agent.SetDestination(targetPosition);
+        }
+    }
+    private void Flee()
+    {
+        Vector3 fleeDirection = transform.position - player.position;
+        fleeDirection.y = 0;
+
+        if (fleeDirection.magnitude > fleeDistance)
+        {
+            currentState = AIState.Roaming;
+            targetPosition = RandomNavMeshLocation();
+            agent.SetDestination(targetPosition);
+        }
+        else
+        {
+            Vector3 fleeDestination = transform.position + fleeDirection.normalized * fleeDistance;
+            agent.SetDestination(fleeDestination);
+        }
     }
 }

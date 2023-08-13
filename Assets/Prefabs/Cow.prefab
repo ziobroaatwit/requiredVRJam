@@ -151,6 +151,8 @@ MonoBehaviour:
   agent: {fileID: 1309402231}
   speed: 0
   walkRadius: 2
+  fleeDistance: 5
+  player: {fileID: 0}
 --- !u!195 &1309402231
 NavMeshAgent:
   m_ObjectHideFlags: 0
