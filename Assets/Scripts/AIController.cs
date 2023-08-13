@@ -15,6 +15,7 @@ public class AIController : MonoBehaviour
     [Range(0, 100)] public float speed;
     [Range(1, 500)] public float walkRadius;
     AIController controller;
+
     // Start is called before the first frame update
     void Start()
     {
