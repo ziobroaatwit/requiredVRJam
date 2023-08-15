@@ -149,10 +149,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreManager: {fileID: 0}
   agent: {fileID: 1309402231}
-  speed: 0
+  speed: 2
   walkRadius: 2
   fleeDistance: 5
   player: {fileID: 0}
+  isStopped: 0
+  roamRadius: 10
+  fleeRadius: 3
 --- !u!195 &1309402231
 NavMeshAgent:
   m_ObjectHideFlags: 0
