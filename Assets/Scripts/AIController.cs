@@ -49,8 +49,12 @@ public class AIController : MonoBehaviour
             if (hasBeenGrabbed == false)
             {
                 hasBeenGrabbed = true;
-                scoreManager.GetComponent<ScoreController>().score++;
             }
+        }
+        if(Math.Abs(this.transform.rotation.eulerAngles.z) >= 50 || Math.Abs(this.transform.rotation.eulerAngles.x) >= 50)
+        {
+            scoreManager.GetComponent<ScoreController>().score++;
+            Destroy(this.gameObject);
         }
         switch (currentState)
         {
