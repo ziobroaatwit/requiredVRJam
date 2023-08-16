@@ -153,6 +153,7 @@ MonoBehaviour:
   walkRadius: 2
   fleeDistance: 5
   player: {fileID: 0}
+  POOF: {fileID: 7790485395101380547, guid: 09601a9bddc279e4f890035763e65184, type: 3}
   isStopped: 0
   roamRadius: 10
   fleeRadius: 3

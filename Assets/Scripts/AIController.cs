@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
+using UnityEngine.VFX;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent (typeof(NavMeshAgent))]
@@ -21,6 +22,7 @@ public class AIController : MonoBehaviour
     private State currentState = State.Roam;
     public float fleeDistance = 5f;
     public Transform player;
+    [SerializeField] VisualEffect POOF;
     public Boolean isStopped = false;
     private enum State
     {
@@ -54,6 +56,7 @@ public class AIController : MonoBehaviour
         if(Math.Abs(this.transform.rotation.eulerAngles.z) >= 50 || Math.Abs(this.transform.rotation.eulerAngles.x) >= 50)
         {
             scoreManager.GetComponent<ScoreController>().score++;
+            POOF.Play();
             Destroy(this.gameObject);
         }
         switch (currentState)
