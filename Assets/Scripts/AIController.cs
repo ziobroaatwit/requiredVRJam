@@ -47,16 +47,17 @@ public class AIController : MonoBehaviour
         if (transform.GetComponent<OVRGrabbable>().isGrabbed)
         {
             gameObject.GetComponent<NavMeshAgent>().enabled = false;
-            controller.enabled = false;
             if (hasBeenGrabbed == false)
             {
-                hasBeenGrabbed = true;
+                controller.enabled = false;
             }
         }
         if(Math.Abs(this.transform.rotation.eulerAngles.z) >= 50 || Math.Abs(this.transform.rotation.eulerAngles.x) >= 50)
         {
+            hasBeenGrabbed = true;
             scoreManager.GetComponent<ScoreController>().score++;
-            POOF.Play();
+            GameObject VE = Instantiate(POOF.gameObject, this.transform.position, Quaternion.identity);
+            VE.GetComponent<VisualEffect>().Play();
             Destroy(this.gameObject);
         }
         switch (currentState)
